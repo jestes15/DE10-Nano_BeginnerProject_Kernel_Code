@@ -1,0 +1,31 @@
+{
+	"configurations": [
+		{
+			"name": "Linux",
+			"includePath": [
+				"/home/bl4z3/de10nano_wd/linux-socfpga/arch/arm/include",
+				"/home/bl4z3/de10nano_wd/linux-socfpga/arch/arm/include/generated",
+				"/home/bl4z3/de10nano_wd/linux-socfpga/include",
+				"/home/bl4z3/de10nano_wd/linux-socfpga/arch/arm/include/uapi",
+				"/home/bl4z3/de10nano_wd/linux-socfpga/arch/arm/include/generated/uapi",
+				"/home/bl4z3/de10nano_wd/linux-socfpga/include/uapi",
+				"/home/bl4z3/de10nano_wd/linux-socfpga/include/generated/uapi",
+				"/home/bl4z3/intelFPGA/20.1/embedded/host_tools/linaro/gcc/lib/gcc/arm-none-linux-gnueabihf/10.3.1/include"
+			],
+			"defines": [
+				"__KERNEL__",
+				"MODULE"
+			],
+			"compilerArgs": [
+				"-nostdinc",
+				"-include",
+				"/usr/src/linux-headers-5.4.0-39-generic/include/linux/kconfig.h",
+				"-include",
+				"/usr/src/linux-headers-5.4.0-39-generic/include/linux/compiler_types.h"
+			],
+			"compilerPath": "/home/bl4z3/intelFPGA/20.1/embedded/host_tools/linaro/gcc/bin/arm-none-linux-gnueabihf-gcc",
+			"intelliSenseMode": "linux-gcc-arm"
+		}
+	],
+	"version": 4
+}
