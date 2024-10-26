@@ -20,8 +20,6 @@ MODULE_AUTHOR("Joshua Estes");
 MODULE_DESCRIPTION("FPGA Interrupt Driver");
 MODULE_VERSION("0.1");
 
-irqreturn_t irq_handler(int irq) {}
-
 static int __init hello_2_init(void)
 {
 	pr_info("Hello, world 2\n");
