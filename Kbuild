@@ -1,1 +1,1 @@
-obj-m := src/fpgaint.o
+obj-m := src/fpga_interrupts.o
