@@ -19,7 +19,7 @@ MODULE_AUTHOR("Joshua Estes");
 MODULE_DESCRIPTION("FPGA Interrupt Driver");
 MODULE_VERSION("0.1");
 
-irqreturn_t fpga_interrupt_handler(int irq, void *dev_id, struct pt_regs *regs)
+irqreturn_t fpga_interrupt_handler(int irq, void *dev_id)
 {
     pr_info("Interrupt\n");
     return IRQ_HANDLED;
@@ -40,6 +40,6 @@ static void __exit irq_ex_exit(void)
 }
 
 module_init(irq_ex_init);
-module_exit(request_irq);
+module_exit(irq_ex_exit);
 
 MODULE_LICENSE("GPL");
