@@ -1,0 +1,195 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright Altera Corporation (C) 2015. All rights reserved.
+ */
+
+#include "socfpga_cyclone5.dtsi"
+
+/ {
+	model = "Terasic DE-10";
+	compatible = "terasic,de10-nano", "altr,socfpga-cyclone5", "altr,socfpga";
+
+	chosen {
+		bootargs = "earlyprintk";
+		stdout-path = "serial0:115200n8";
+	};
+
+	memory@0 {
+		name = "memory";
+		device_type = "memory";
+		reg = <0x0 0x40000000>; /* 1GB */
+	};
+
+	aliases {
+		ethernet0 = &gmac1;
+	};
+
+	regulator_3_3v: 3-3-v-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "3.3V";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		hps0 {
+			label = "hps_led0";
+			gpios = <&portb 24 0>;
+			linux,default-trigger = "heartbeat";
+		};
+	};
+};
+
+/ {
+	soc {
+		fpga_interrupts {
+			compatible = "altr,fpga_interrupts";
+			interrupts = <
+				GIC_SPI 40 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ0 */
+                GIC_SPI 41 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ1 */
+                GIC_SPI 42 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ2 */
+                GIC_SPI 43 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ3 */
+                GIC_SPI 44 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ4 */
+                GIC_SPI 45 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ5 */
+                GIC_SPI 46 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ6 */
+                GIC_SPI 47 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ7 */
+                GIC_SPI 48 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ8 */
+                GIC_SPI 49 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ9 */
+                GIC_SPI 50 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ10 */
+                GIC_SPI 51 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ11 */
+                GIC_SPI 52 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ12 */
+                GIC_SPI 53 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ13 */
+                GIC_SPI 54 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ14 */
+                GIC_SPI 55 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ15 */
+                GIC_SPI 56 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ16 */
+                GIC_SPI 57 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ17 */
+                GIC_SPI 58 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ18 */
+                GIC_SPI 59 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ19 */
+                GIC_SPI 60 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ20 */
+                GIC_SPI 61 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ21 */
+                GIC_SPI 62 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ22 */
+                GIC_SPI 63 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ23 */
+                GIC_SPI 64 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ24 */
+                GIC_SPI 65 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ25 */
+                GIC_SPI 66 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ26 */
+                GIC_SPI 67 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ27 */
+                GIC_SPI 68 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ28 */
+                GIC_SPI 69 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ29 */
+                GIC_SPI 70 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ30 */
+                GIC_SPI 71 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ31 */
+                GIC_SPI 72 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ32 */
+                GIC_SPI 73 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ33 */
+                GIC_SPI 74 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ34 */
+                GIC_SPI 75 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ35 */
+                GIC_SPI 76 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ36 */
+                GIC_SPI 77 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ37 */
+                GIC_SPI 78 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ38 */
+                GIC_SPI 79 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ39 */
+                GIC_SPI 80 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ40 */
+                GIC_SPI 81 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ41 */
+                GIC_SPI 82 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ42 */
+                GIC_SPI 83 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ43 */
+                GIC_SPI 84 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ44 */
+                GIC_SPI 85 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ45 */
+                GIC_SPI 86 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ46 */
+                GIC_SPI 87 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ47 */
+                GIC_SPI 88 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ48 */
+                GIC_SPI 89 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ49 */
+                GIC_SPI 90 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ50 */
+                GIC_SPI 91 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ51 */
+                GIC_SPI 92 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ52 */
+                GIC_SPI 93 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ53 */
+                GIC_SPI 94 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ54 */
+                GIC_SPI 95 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ55 */
+                GIC_SPI 96 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ56 */
+                GIC_SPI 97 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ57 */
+                GIC_SPI 98 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ58 */
+                GIC_SPI 99 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ59 */
+                GIC_SPI 100 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ60 */
+                GIC_SPI 101 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ61 */
+                GIC_SPI 102 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ62 */
+                GIC_SPI 103 IRQ_TYPE_EDGE_RISING /* FPGA_IRQ63 */
+			>;
+		};
+	};
+};
+
+&gmac1 {
+	status = "okay";
+	phy-mode = "rgmii";
+
+	txd0-skew-ps = <0>; /* -420ps */
+	txd1-skew-ps = <0>; /* -420ps */
+	txd2-skew-ps = <0>; /* -420ps */
+	txd3-skew-ps = <0>; /* -420ps */
+	rxd0-skew-ps = <420>; /* 0ps */
+	rxd1-skew-ps = <420>; /* 0ps */
+	rxd2-skew-ps = <420>; /* 0ps */
+	rxd3-skew-ps = <420>; /* 0ps */
+	txen-skew-ps = <0>; /* -420ps */
+	txc-skew-ps = <1860>; /* 960ps */
+	rxdv-skew-ps = <420>; /* 0ps */
+	rxc-skew-ps = <1680>; /* 780ps */
+
+	max-frame-size = <3800>;
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+&gpio2 {
+	status = "okay";
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <100000>;
+
+	adxl345: adxl345@53 {
+		compatible = "adi,adxl345";
+		reg = <0x53>;
+
+		interrupt-parent = <&portc>;
+		interrupts = <3 2>;
+	};
+};
+
+&mmc0 {
+	vmmc-supply = <&regulator_3_3v>;
+	vqmmc-supply = <&regulator_3_3v>;
+	status = "okay";
+};
+
+&uart0 {
+	status = "okay";
+};
+
+&usb1 {
+	status = "okay";
+};
+
+&fpga_bridge0 {
+	status = "okay";
+	bridge-enable = <1>;
+};
+
+&fpga_bridge1 {
+	status = "okay";
+	bridge-enable = <1>;
+};
+
+&fpga_bridge2 {
+	status = "okay";
+	bridge-enable = <1>;
+};
+
+&fpga_bridge3 {
+	status = "okay";
+	bridge-enable = <1>;
+};
