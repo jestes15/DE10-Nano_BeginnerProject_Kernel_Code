@@ -26,108 +26,46 @@ MODULE_VERSION("0.1");
 
 #define DEVNAME "fpga_interrupts"
 
-#define NUM_INTERRUPTS 1
+static uint32_t irq_status;
+
+static ssize_t irq_status_show(struct device *dev, struct device_attribute *attr, char *buf);
+static ssize_t irq_status_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t len);
 
 static DEFINE_SEMAPHORE(interrupt_mutex);
 static DEFINE_SPINLOCK(interrupt_flag_lock);
+static DEVICE_ATTR_RW(irq_status);
 
-static int irq_num;
-static uint32_t irq_status[2];
+static ssize_t irq_status_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+    spin_lock(&interrupt_flag_lock);
+    buf[0] = irq_status;
+    buf[1] = '\n';
+    buf[2] = '\0';
+    spin_unlock(&interrupt_flag_lock);
 
-// static ssize_t irq_status_show(struct device *dev, struct device_attribute *attr, char *buf)
-// {
-//     int ret;
-//     int i;
-//     uint32_t mask;
+    return 3;
+}
 
-//     spin_lock(&interrupt_flag_lock);
-
-//     for (i = 0; i < NUM_INTERRUPTS; i++)
-//     {
-//         if (i % 32 == 0)
-//         {
-//             mask = 1;
-//         }
-//         buf[i] = (irq_status[i / 32] & mask) ? '1' : '0';
-//         mask <<= 1;
-//     }
-
-//     irq_status[0] = 0;
-//     irq_status[1] = 0;
-
-//     spin_unlock(&interrupt_flag_lock);
-
-//     buf[NUM_INTERRUPTS] = '\n';
-//     buf[NUM_INTERRUPTS + 1] = '\0';
-//     ret = NUM_INTERRUPTS + 2;
-
-//     return ret;
-// }
-
-// static ssize_t irq_status_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t len)
-// {
-//     return -EROFS;
-// }
-
-// static DEVICE_ATTR_RW(irq_status);
-
-// static irq_handler_t __fpga_interrupts_driver_isr(int irq, void *kobj)
-// {
-//     int i;
-
-//     for (i = 0; i < NUM_INTERRUPTS; i++)
-//     {
-//         if (irq_nums[i] == irq)
-//         {
-//             break;
-//         }
-//     }
-//     if (i == NUM_INTERRUPTS)
-//     {
-//         return (irq_handler_t)IRQ_NONE;
-//     }
-
-//     spin_lock(&interrupt_flag_lock);
-
-//     irq_status[i / 32] |= (1 << (i % 32));
-
-//     spin_unlock(&interrupt_flag_lock);
-
-//     sysfs_notify((struct kobject *)kobj, NULL, "irq_status");
-
-//     return (irq_handler_t)IRQ_HANDLED;
-// }
+static ssize_t irq_status_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t len)
+{
+    return -EROFS;
+}
 
 static irq_handler_t __fpga_interrupts_driver_isr(int irq, void *kobj)
 {
-    int i;
-
-    for (i = 0; i < NUM_INTERRUPTS; i++)
-    {
-        if (irq_nums[i] == irq)
-        {
-            break;
-        }
-    }
-    if (i == NUM_INTERRUPTS)
-    {
-        return (irq_handler_t)IRQ_NONE;
-    }
-
-    spin_lock(&interrupt_flag_lock);
-
-    irq_status[i / 32] |= (1 << (i % 32));
-
-    spin_unlock(&interrupt_flag_lock);
-
     sysfs_notify((struct kobject *)kobj, NULL, "irq_status");
+
+    printk(KERN_INFO "%s: IRQ %d triggered!\n", DEVNAME, irq);
 
     return (irq_handler_t)IRQ_HANDLED;
 }
 
 static int __fpga_interrupts_driver_probe(struct platform_device *pdev)
 {
-    int ret = device_create_file(&pdev->dev, &dev_attr_irq_status);
+    int ret;
+    int irq_num;
+
+    ret = device_create_file(&pdev->dev, &dev_attr_irq_status);
     if (ret)
     {
         printk(KERN_ALERT "%s: Error %d when executing device_create_file in function %s!\n", DEVNAME, ret,
@@ -135,7 +73,7 @@ static int __fpga_interrupts_driver_probe(struct platform_device *pdev)
         return ret;
     }
 
-    int irq_num = platform_get_irq_optional(pdev, 0);
+    irq_num = platform_get_irq_optional(pdev, 0);
     printk(KERN_INFO "%s: IRQ %d about to be registered!\n", DEVNAME, irq_num);
 
     ret = request_irq(irq_num, (irq_handler_t)__fpga_interrupts_driver_isr, 0, DEVNAME, &pdev->dev.kobj);
